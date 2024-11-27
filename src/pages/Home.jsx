@@ -9,6 +9,7 @@ import {
 } from "../store/api/taskApi";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
+import image from "../assets/images/b2.jpg";
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
@@ -115,15 +116,14 @@ const Home = () => {
     <div
       className="flex flex-col md:flex-row min-w-screen min-h-screen bg-cover bg-center relative"
       style={{
-        backgroundImage:
-          'url("https://images.pexels.com/photos/28594070/pexels-photo-28594070/free-photo-of-stunning-sunset-over-the-aegean-sea-in-balikesir.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")',
+        backgroundImage: `url(${image})`,
       }}
     >
       <Sidebar user={user} taskCounts={taskCounts} />
       <div className="w-full p-12 flex flex-col items-center relative z-10">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
         <div className="flex flex-col md:flex-row items-center text-center md:text-left justify-between w-full mb-10">
-          <div className="flex flex-col mb-5 md:mb-0">
+          <div className="hidden md:flex flex-col mb-5 md:mb-0">
             <h1 className="text-3xl md:text-5xl font-bold text-white z-10 mb-2">
               TaskMate
             </h1>
@@ -178,21 +178,25 @@ const Home = () => {
                 <button
                   // onClick={() => handleEdit(todo.id)}
                   onClick={(e) => {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                     handleEdit(todo.id);
                   }}
                   className="text-blue-600 hover:text-blue-700"
                 >
-                  <span className="material-symbols-outlined text-base md:text-2xl">edit_square</span>
+                  <span className="material-symbols-outlined text-lg md:text-2xl">
+                    edit_square
+                  </span>
                 </button>
                 <button
                   onClick={(e) => {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                     handleDelete(todo.id);
                   }}
                   className="text-red-600 hover:text-red-700"
                 >
-                  <span className="material-symbols-outlined text-base md:text-2xl">delete</span>
+                  <span className="material-symbols-outlined text-lg md:text-2xl">
+                    delete
+                  </span>
                 </button>
               </div>
             </div>
