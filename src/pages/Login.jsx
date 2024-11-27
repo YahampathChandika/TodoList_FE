@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { TextField, CircularProgress } from "@mui/material";
-// import logo from "../assets/images/logo.png";
+import logo from "../assets/images/taskmate.png";
 import { useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../store/api/authApi";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import image from "../assets/images/b3.jpg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -70,13 +71,24 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white py-12 px-6 md:px-12 rounded-lg shadow-lg w-10/12 md:w-1/4">
-        {/* <div className="flex justify-center mb-6">
-          <img src={logo} alt="Logo" className="w-32 md:w-48" />
-        </div> */}
+    <div
+      className="flex items-center justify-center min-h-screen bg-gray-100"
+      style={{
+        backgroundImage: `url(${image})`,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        height: "100vh",
+      }}
+    >
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+      <div className="z-20 bg-white py-12 px-6 md:px-12 rounded-lg shadow-lg w-10/12 md:w-1/4">
+        <div className="flex justify-center mb-6">
+          <img src={logo} alt="Logo" className="w-36 md:w-48" />
+        </div>
 
-        <h2 className="text-center text-3xl md:text-4xl font-semibold text-rose-pink mb-8">
+        <h2 className="text-center text-3xl md:text-4xl font-semibold text-gray-500 mb-8">
           LogIn
         </h2>
 
@@ -107,7 +119,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="bg-rose-pink w-full h-12 rounded-md hover:bg-dark-pink text-white transition-all duration-300 flex justify-center items-center"
+            className="bg-blue-500 w-full h-12 rounded-md hover:bg-blue-600 text-white font-medium transition-all duration-300 flex justify-center items-center"
             disabled={loading}
           >
             {loading ? (
@@ -129,7 +141,7 @@ export default function Login() {
             Don't have an account?{" "}
             <button
               onClick={handleCreateAccount}
-              className="text-pink-600 hover:underline"
+              className="text-blue-600 hover:underline"
             >
               Create an account
             </button>

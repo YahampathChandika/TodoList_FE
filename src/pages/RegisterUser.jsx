@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TextField, Button, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import logo from "../assets/images/logo.png";
+import logo from "../assets/images/taskmate.png";
 import { useAddUserMutation } from "../store/api/userApi";
 import Swal from "sweetalert2";
+import image from "../assets/images/b3.jpg";
 
 export default function RegisterUser() {
   const navigate = useNavigate();
@@ -73,12 +74,22 @@ export default function RegisterUser() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div
+      className="flex items-center justify-center min-h-screen bg-gray-100"
+      style={{
+        backgroundImage: `url(${image})`,
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+        height: "100vh",
+      }}
+    >
       <div className="bg-white py-12 px-6 md:px-12 rounded-lg shadow-lg w-10/12 md:w-2/5">
-        {/* <div className="flex justify-center mb-6">
-          <img src={logo} alt="Logo" className="w-32 md:w-48" />
-        </div> */}
-        <h2 className="text-center text-3xl md:text-4xl font-semibold text-rose-pink mb-8">
+        <div className="flex justify-center mb-6">
+          <img src={logo} alt="Logo" className="w-36 md:w-48" />
+        </div>
+        <h2 className="text-center text-3xl md:text-4xl font-semibold text-gray-500 mb-8">
           Register
         </h2>
 
@@ -161,7 +172,7 @@ export default function RegisterUser() {
 
           <button
             type="submit"
-            className="bg-rose-pink w-full h-12 rounded-md hover:bg-dark-pink text-white transition-all duration-300"
+            className="bg-blue-500 w-full h-12 rounded-md hover:bg-blue-600 font-medium text-white transition-all duration-300"
           >
             {loading ? (
               <CircularProgress className="!text-white" size={16} />
@@ -181,7 +192,7 @@ export default function RegisterUser() {
               Already have an account?{" "}
               <button
                 onClick={handleLoginRedirect}
-                className="text-pink-600 hover:underline"
+                className="text-blue-600 hover:underline"
               >
                 Login
               </button>
