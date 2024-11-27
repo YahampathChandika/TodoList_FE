@@ -10,9 +10,11 @@ import {
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import image from "../assets/images/b2.jpg";
+import { HashLoader } from "react-spinners";
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -38,8 +40,6 @@ const Home = () => {
   const [toggleTask] = useToggleTaskMutation();
   const [open, setOpen] = useState(false);
   const [editTask, setEditTask] = useState(null);
-
-  console.log(todos);
 
   const calculateTaskCounts = () => {
     const all = todos?.length || 0;
@@ -99,9 +99,15 @@ const Home = () => {
   };
 
   const handleCheck = async (id) => {
-    console.log(`Check todo with id: ${id}`);
-    await toggleTask(id);
-    await refetch();
+    setLoading(true);
+    try {
+      await toggleTask(id);
+      await refetch();
+    } catch (error) {
+      console.error("Error toggling task:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleModalClose = () => {
@@ -160,6 +166,7 @@ const Home = () => {
                   checked={todo.completed}
                   onChange={() => handleCheck(todo.id)}
                   className="form-checkbox h-4 md:h-6 w-4 md:w-6 !text-green-500 cursor-pointer"
+                  disabled={loading} // Disable the checkbox while loading
                 />
                 <div className="flex my-2 text-sm md:text-lg font-normal">
                   <span>{`${todo.date} | ${todo.time}`}</span>
@@ -202,6 +209,19 @@ const Home = () => {
             </div>
           ))}
         </div>
+        {/* {loading && (
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            <span className="relative flex h-12 w-12">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+              <span className="absolute inline-flex rounded-full h-8` w-8` bg-sky-500 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+            </span>
+          </div>
+        )} */}
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            <HashLoader  color="#38bdf8" size={50} />
+          </div>
+        )}
       </div>
 
       <TodoModal
