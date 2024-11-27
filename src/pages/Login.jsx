@@ -82,18 +82,14 @@ export default function Login() {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            label="Email Address"
+            label="User Name"
             variant="outlined"
             fullWidth
-            {...register("email", {
-              required: "Please enter your email.",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Please enter a valid email address.",
-              },
+            {...register("username", {
+              required: "Please enter your username.",
             })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
+            error={!!errors.username}
+            helperText={errors.username?.message}
           />
 
           <TextField

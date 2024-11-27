@@ -118,14 +118,14 @@ export default function RegisterUser() {
             />
 
             <TextField
-              label="Phone Number"
+              label="User Name"
               variant="outlined"
               fullWidth
-              {...register("phoneNumber", {
-                required: "Phone number is required",
+              {...register("username", {
+                required: "User Name is required",
               })}
-              error={!!errors.phoneNumber}
-              helperText={errors.phoneNumber?.message}
+              error={!!errors.username}
+              helperText={errors.username?.message}
             />
 
             <TextField

@@ -3,16 +3,32 @@ import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-const Sidebar = ({ user }) => {
-  const today = new Date();
-  const [selectedDate, setSelectedDate] = React.useState(today);
+const Sidebar = ({ user, taskCounts }) => {
 
-  // Example task summary data
-  const taskSummary = {
-    allTasks: 10,
-    completedTasks: 4,
-    todoTasks: 6,
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure you want to logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Logout",
+      customClass: {
+        popup: "w-10/12 max-w-xs md:max-w-lg",
+        title: "text-lg md:text-2xl",
+        icon: "text-sm md:text-lg",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear();
+        navigate("/");
+      }
+    });
   };
 
   return (
@@ -21,13 +37,13 @@ const Sidebar = ({ user }) => {
       <div className="space-y-6">
         <div className="text-center">
           <h2 className="mt-4 text-xl font-semibold">
-            {user.name || "User Name"}
+            {user.firstName} {user.lastName}
           </h2>
           <p className="text-gray-400">{user.email || "user@example.com"}</p>
         </div>
 
         {/* Calendar */}
-        <div className="bg-red-900">
+        <div className="bg-white/20 rounded-md">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar />
           </LocalizationProvider>
@@ -39,22 +55,25 @@ const Sidebar = ({ user }) => {
           <ul className="space-y-1">
             <li className="flex justify-between">
               <span>All Tasks:</span>
-              <span>{taskSummary.allTasks}</span>
+              <span>0{taskCounts.all}</span>
             </li>
             <li className="flex justify-between text-green-400">
               <span>Completed:</span>
-              <span>{taskSummary.completedTasks}</span>
+              <span>0{taskCounts.completed}</span>
             </li>
             <li className="flex justify-between text-red-400">
               <span>To-do:</span>
-              <span>{taskSummary.todoTasks}</span>
+              <span>0{taskCounts.todo}</span>
             </li>
           </ul>
         </div>
       </div>
 
       {/* Logout Button */}
-      <button className="bg-red-500 hover:bg-red-600 text-white py-2 rounded mt-6">
+      <button
+        className="bg-red-500 hover:bg-red-600 text-white py-2 rounded mt-6 cursor-pointer"
+        onClick={handleLogout}
+      >
         Logout
       </button>
     </div>
