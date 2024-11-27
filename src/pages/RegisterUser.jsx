@@ -69,7 +69,7 @@ export default function RegisterUser() {
   };
 
   useEffect(() => {
-    document.title = "Register | Cook";
+    document.title = "Register | TaskMate";
   }, []);
 
   return (

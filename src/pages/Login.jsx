@@ -44,7 +44,7 @@ export default function Login() {
         });
         Toast.fire({
           icon: "success",
-          title: "Welcome to Cook!",
+          title: "Welcome to TaskMate!",
         });
       } else {
         setErrorMessage(
@@ -66,7 +66,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    document.title = "LogIn | Cook";
+    document.title = "LogIn | TaskMate";
   }, []);
 
   return (

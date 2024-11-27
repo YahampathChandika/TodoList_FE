@@ -8,6 +8,7 @@ import {
   useToggleTaskMutation,
 } from "../store/api/taskApi";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
@@ -32,7 +33,7 @@ const Home = () => {
 
   const userId = userData?.userId;
   const { data: todos, refetch } = useGetTasksQuery(userId);
-  const [delteTask] = useDeleteTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
   const [toggleTask] = useToggleTaskMutation();
   const [open, setOpen] = useState(false);
   const [editTask, setEditTask] = useState(null);
@@ -57,25 +58,49 @@ const Home = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log(`Delete todo with id: ${id}`);
-    await delteTask(id);
-    await refetch();
+    Swal.fire({
+      title: "Are you sure you want to delete?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Delete",
+      customClass: {
+        popup: "w-10/12 max-w-xs md:max-w-lg",
+        title: "text-lg md:text-2xl",
+        icon: "text-sm md:text-lg",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteTask(id);
+          await refetch();
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: false,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Your task has been deleted.",
+          });
+        } catch (error) {
+          Swal.fire("Error", "Failed to delete the task.", "error");
+        }
+      }
+    });
   };
 
   const handleCheck = async (id) => {
     console.log(`Check todo with id: ${id}`);
     await toggleTask(id);
     await refetch();
-  };
-
-  const handleAddTodo = (todoText) => {
-    const newTodo = {
-      id: todos.length + 1,
-      text: todoText,
-      completed: false,
-    };
-    setTodos([...todos, newTodo]);
-    setOpen(false); // Close modal after adding
   };
 
   const handleModalClose = () => {
@@ -88,90 +113,92 @@ const Home = () => {
 
   return (
     <div
-      className="flex min-w-screen min-h-screen bg-cover bg-center relative"
+      className="flex flex-col md:flex-row min-w-screen min-h-screen bg-cover bg-center relative"
       style={{
         backgroundImage:
           'url("https://images.pexels.com/photos/28594070/pexels-photo-28594070/free-photo-of-stunning-sunset-over-the-aegean-sea-in-balikesir.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")',
       }}
     >
-      {/* <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div> */}
-
       <Sidebar user={user} taskCounts={taskCounts} />
       <div className="w-full p-12 flex flex-col items-center relative z-10">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
-        <div className="flex justify-between w-full mb-6">
-          <h1 className="text-4xl font-bold text-white text-center mb-6">
-            To-Do List
-          </h1>
+        <div className="flex flex-col md:flex-row items-center text-center md:text-left justify-between w-full mb-10">
+          <div className="flex flex-col mb-5 md:mb-0">
+            <h1 className="text-3xl md:text-5xl font-bold text-white z-10 mb-2">
+              TaskMate
+            </h1>
+            <span className="text-white z-10">
+              Your friendly companion for productivity.
+            </span>
+          </div>
           <Button
             onClick={handleModalOpen}
             variant="contained"
             color="primary"
+            className="!h-10 !md:h-12 !text-sm !p-4 md:!p-6"
             startIcon={
               <span className="material-symbols-outlined">add_circle</span>
             }
           >
-            Add New Todo
+            Add New Task
           </Button>
         </div>
 
         {/* Todo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 w-full">
           {todos?.map((todo) => (
             <div
               key={todo.id}
-              className={`p-4 rounded-lg opacity-95 shadow-lg flex flex-col items-start cursor-pointer ${
+              className={`p-2 md:p-5 rounded-lg opacity-95 shadow-lg flex flex-col items-start cursor-pointer  ${
                 todo.completed ? "bg-green-100" : "bg-white"
               }`}
-              // onClick={() => handleCheck(todo.id)}
+              onClick={() => handleCheck(todo.id)}
             >
-              <div className="flex justify-between w-full">
-                <div className="flex flex-col items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => handleCheck(todo.id)}
-                    className="form-checkbox h-5 w-5 text-blue-500 cursor-pointer"
-                  />
-                  <span
-                    className={`${
-                      todo.completed
-                        ? "line-through text-gray-500"
-                        : "text-gray-800"
-                    } text-lg`}
-                  >
-                    {todo.task}
-                  </span>
-                  <span>{todo.date}</span>
-                  <span>{todo.time}</span>
+              <div className="w-full flex items-center justify-between">
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() => handleCheck(todo.id)}
+                  className="form-checkbox h-4 md:h-6 w-4 md:w-6 !text-green-500 cursor-pointer"
+                />
+                <div className="flex my-2 text-sm md:text-lg font-normal">
+                  <span>{`${todo.date} | ${todo.time}`}</span>
                 </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleEdit(todo.id)}
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    <span className="material-symbols-outlined">edit</span>
-                  </button>
-                  <button
-                    onClick={() => handleDelete(todo.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <span className="material-symbols-outlined">delete</span>
-                  </button>
-                </div>
+              </div>
+              <span
+                className={`${
+                  todo.completed
+                    ? "line-through text-gray-500"
+                    : "text-gray-800"
+                } md:text-xl font-medium md:font-semibold my-3`}
+              >
+                {todo.task}
+              </span>
+              <div className="flex space-x-2 md:space-x-4 w-full items-center justify-end">
+                <button
+                  // onClick={() => handleEdit(todo.id)}
+                  onClick={(e) => {
+                    e.stopPropagation(); 
+                    handleEdit(todo.id);
+                  }}
+                  className="text-blue-600 hover:text-blue-700"
+                >
+                  <span className="material-symbols-outlined text-base md:text-2xl">edit_square</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); 
+                    handleDelete(todo.id);
+                  }}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <span className="material-symbols-outlined text-base md:text-2xl">delete</span>
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Modal for adding a new todo */}
-      {/* <TodoModal
-        open={open}
-        handleClose={handleModalClose}
-        handleAddTodo={handleAddTodo}
-        userId={userId}
-      /> */}
 
       <TodoModal
         open={open}

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import { Modal, Box, TextField, Button, CircularProgress } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
@@ -11,6 +11,7 @@ import {
   useGetTasksQuery,
   useUpdateTaskMutation,
 } from "../store/api/taskApi";
+import Swal from "sweetalert2";
 
 const TodoModal = ({ open, handleClose, userId, taskData }) => {
   const {
@@ -19,19 +20,24 @@ const TodoModal = ({ open, handleClose, userId, taskData }) => {
     formState: { errors },
     reset,
   } = useForm();
+
   const [addTask, { isLoading, error }] = useAddTaskMutation();
-  const [updateTask] = useUpdateTaskMutation();
+  const [updateTask, { isLoading: updateLoading }] = useUpdateTaskMutation();
   const { refetch } = useGetTasksQuery(userId);
 
   useEffect(() => {
     if (taskData) {
       reset({
         task: taskData.task,
-        date: dayjs(taskData.date), 
+        date: dayjs(taskData.date),
         time: dayjs(taskData.time, "HH:mm"),
       });
     } else {
-      reset();
+      reset({
+        task: "",
+        date: null,
+        time: null,
+      });
     }
   }, [taskData, reset]);
 
@@ -44,17 +50,45 @@ const TodoModal = ({ open, handleClose, userId, taskData }) => {
     };
 
     try {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
       if (taskData) {
         // Editing an existing task
         await updateTask({ id: taskData.id, updatedData: taskDetails });
         await refetch();
+        Toast.fire({
+          icon: "success",
+          title: "Task updated successfully!",
+        });
       } else {
         // Adding a new task
         await addTask(taskDetails);
         await refetch();
+        Toast.fire({
+          icon: "success",
+          title: "Task added successfully!",
+        });
       }
-      handleClose();
+
+      reset(); // Reset form fields
+      handleClose(); // Close the modal
     } catch (err) {
+      Swal.fire({
+        title: "Error",
+        text: "Failed to save the task. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
       console.error("Failed to save task:", err);
     }
   };
@@ -72,19 +106,20 @@ const TodoModal = ({ open, handleClose, userId, taskData }) => {
           bgcolor: "white",
           borderRadius: 3,
           boxShadow: 24,
-          px: 4,
+          px: 5,
           py: 5,
-          height: "40vh",
-          maxHeight: "60vh",
+          height: "auto",
           overflowY: "hidden",
           outline: "none",
+          "@media (max-width: 768px)": { width: "90%", px: 2, py: 4 },
+          "@media (max-width: 480px)": { width: "95%", px: 2, py: 4 },
         }}
       >
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-          Add New Task
+          {taskData ? "Edit Task" : "Add New Task"}
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-10">
           {/* Task Text Field */}
           <Controller
             name="task"
@@ -149,7 +184,7 @@ const TodoModal = ({ open, handleClose, userId, taskData }) => {
           {/* Error Message */}
           {error && (
             <p className="text-red-500 mb-4">
-              Failed to add task. Please try again.
+              Failed to save task. Please try again.
             </p>
           )}
 
@@ -159,18 +194,23 @@ const TodoModal = ({ open, handleClose, userId, taskData }) => {
               onClick={handleClose}
               variant="outlined"
               color="secondary"
-              className="w-full h-10"
+              className="w-full h-11 !font-medium !text-base"
             >
               Cancel
             </Button>
             <Button
+              className="w-full h-11 !font-medium !text-base flex items-center justify-center"
               type="submit"
               variant="contained"
               color="primary"
-              className="w-full h-10"
-              disabled={isLoading}
             >
-              {taskData ? "Update" : "Add"}
+              {isLoading || updateLoading ? (
+                <CircularProgress className="!text-white" size={20} />
+              ) : taskData ? (
+                "Update"
+              ) : (
+                "Add"
+              )}
             </Button>
           </div>
         </form>
