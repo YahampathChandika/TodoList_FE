@@ -79,10 +79,10 @@ export default function Login() {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
-        height: "100vh",
+        // height: "100vh",
       }}
     >
-      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
       <div className="z-20 bg-white py-12 px-6 md:px-12 rounded-lg shadow-lg w-10/12 md:w-1/4">
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="w-36 md:w-48" />
