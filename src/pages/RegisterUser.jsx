@@ -85,7 +85,7 @@ export default function RegisterUser() {
         // height: "100vh",
       }}
     >
-      <div className="absolute top-0 left-0 w-full h-auto bg-black opacity-40"></div>
+      <div className="hidden md:block absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
       <div className="z-20 bg-white py-12 px-6 md:px-12 rounded-lg shadow-lg w-10/12 md:w-2/5">
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="w-36 md:w-48" />
