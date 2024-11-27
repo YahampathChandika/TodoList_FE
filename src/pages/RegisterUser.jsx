@@ -47,7 +47,7 @@ export default function RegisterUser() {
         Swal.fire({
           title: "Oops...",
           text:
-            response?.error?.data?.payload ||
+            response?.error?.data?.error ||
             response?.data?.payload ||
             "Failed to add record!",
           icon: "error",
