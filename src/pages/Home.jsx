@@ -145,7 +145,7 @@ const Home = () => {
         </div>
 
         {/* Todo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-10 w-full">
           {todos?.map((todo) => (
             <div
               key={todo.id}

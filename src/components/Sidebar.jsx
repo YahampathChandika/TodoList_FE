@@ -33,7 +33,7 @@ const Sidebar = ({ user, taskCounts }) => {
     <div className="w-full md:w-1/4 bg-gradient-to-b from-[#001f3f] to-[#3b4a66] text-white md:h-screen p-8 flex flex-col justify-between shadow-lg">
       {/* User Info */}
       <div className="space-y-8 flex flex-col justify-evenly h-full">
-        <div className="text-center flex md:flex-col items-center justify-between">
+        <div className="text-center flex md:flex-col items-center justify-between text-blue-200 md:text-white">
           <div className="flex md:flex-col items-center space-x-2 md:space-x-0">
             <div className="w-10 h-10 md:w-24 md:h-24 mx-auto bg-blue-600 rounded-full flex items-center justify-center md:text-3xl md:font-bold shadow-lg">
               {user.firstName?.charAt(0)}
