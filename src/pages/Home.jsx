@@ -149,7 +149,7 @@ const Home = () => {
           {todos?.map((todo) => (
             <div
               key={todo.id}
-              className={`p-2 md:p-5 rounded-lg opacity-95 shadow-lg flex flex-col items-start cursor-pointer  ${
+              className={`p-3 md:p-5 rounded-lg opacity-95 shadow-lg flex flex-col items-start cursor-pointer  ${
                 todo.completed ? "bg-green-100" : "bg-white"
               }`}
               onClick={() => handleCheck(todo.id)}
