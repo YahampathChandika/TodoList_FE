@@ -10,6 +10,7 @@ import {
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import image from "../assets/images/b2.jpg";
+import nodata from "../assets/images/nodata.svg";
 import { HashLoader } from "react-spinners";
 
 const Home = () => {
@@ -73,6 +74,7 @@ const Home = () => {
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         try {
           await deleteTask(id);
           await refetch();
@@ -93,6 +95,8 @@ const Home = () => {
           });
         } catch (error) {
           Swal.fire("Error", "Failed to delete the task.", "error");
+        } finally {
+          setLoading(false);
         }
       }
     });
@@ -209,17 +213,24 @@ const Home = () => {
             </div>
           ))}
         </div>
-        {/* {loading && (
-          <div className="absolute inset-0 flex items-center justify-center z-20">
-            <span className="relative flex h-12 w-12">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-              <span className="absolute inline-flex rounded-full h-8` w-8` bg-sky-500 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
-            </span>
-          </div>
-        )} */}
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center z-20">
-            <HashLoader  color="#38bdf8" size={50} />
+            <HashLoader color="#38bdf8" size={50} />
+          </div>
+        )}
+        {todos?.length === 0 && (
+          <div className="md:absolute md:inset-0 flex flex-col items-center justify-center z-20">
+            <img
+              src={nodata}
+              alt="No Data"
+              className="w-36 h-36 md:w-80 md:h-80"
+            />
+            <p className="text-white mt-8 text-xl md:text-2xl font-semibold">
+              No tasks available
+            </p>
+            <p className="text-gray-300 mt-2 text-sm md:text-base">
+              Add a new task to get started!
+            </p>
           </div>
         )}
       </div>
