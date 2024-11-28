@@ -49,7 +49,7 @@ export default function Login() {
         });
       } else {
         setErrorMessage(
-          response?.error?.data?.message ||
+          response?.error?.data?.error ||
             response?.error?.data?.errors[0]?.msg ||
             "Login failed"
         );
