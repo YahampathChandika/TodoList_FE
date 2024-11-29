@@ -132,7 +132,7 @@ const Home = () => {
       <Sidebar user={user} taskCounts={taskCounts} />
       <div className="w-full p-12 flex flex-col items-center relative z-10">
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
-        <div className="flex flex-col md:flex-row items-center text-center md:text-left justify-between w-full mb-10">
+        <div className="flex flex-col md:flex-row items-center text-center md:text-left justify-between w-full mb-10 z-30">
           <div className="hidden md:flex flex-col mb-5 md:mb-0">
             <h1 className="text-3xl md:text-5xl font-bold text-white z-10 mb-2">
               TaskMate
