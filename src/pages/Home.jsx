@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import image from "../assets/images/b2.jpg";
 import nodata from "../assets/images/nodata.svg";
 import { HashLoader } from "react-spinners";
+import Snowfall from "react-snowfall";
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
@@ -234,6 +235,15 @@ const Home = () => {
           </div>
         )}
       </div>
+
+      <Snowfall
+        style={{
+          position: "fixed",
+          width: "100vw",
+          height: "100vh",
+          zIndex: 100,
+        }}
+      />
 
       <TodoModal
         open={open}
